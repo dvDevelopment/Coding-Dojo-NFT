@@ -68,7 +68,8 @@ contract CodingDojo is Ownable {
         _counter++;
         _tokenIds.push(token_id);
 
-
+        _mint(to,token_id);
+        _setTokenURI(token_id,uri);
 
     }
 
@@ -85,6 +86,9 @@ contract CodingDojo is Ownable {
      * Emits a {Transfer} event.
     */
     function _mint(address to, uint256 tokenId) internal virtual {
+        _tokenOwners[tokenId] = to;
+        _ownerBalance[to] = _ownerBalance[to] + 1;
+
     }
 
     /**
@@ -102,7 +106,13 @@ contract CodingDojo is Ownable {
      * Returns the Uniform Resource Identifier (URI) for tokenId token.
      */
     function tokenURI(uint256 tokenId) public view returns (string memory) {
-        return _tokenURIs[tokenId];
+        require(_exists(tokenId),"error");
+
+        string memory tokenUri = _tokenURIs[tokenId];
+        string memory baseUri = _baseURI();
+
+
+        return bytes(baseUri).length > 0 ? string(abi.encodePacked(baseUri,tokenUri)) : "";
     }
 
     /**
@@ -121,7 +131,7 @@ contract CodingDojo is Ownable {
      * @dev See {IERC721Enumerable-totalSupply}.
      */
     function totalSupply() public view returns (uint256) {
-        return _counter;
+        return _tokenIds.length;
     }
 
     /**
