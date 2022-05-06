@@ -26,14 +26,14 @@ contract CodingDojo is Ownable {
      * @dev See {IERC721Metadata-name}.
      */
     function name() public view returns (string memory) {
-        return "";
+        return _name;
     }
 
     /**
      * @dev See {IERC721Metadata-symbol}.
      */
     function symbol() public view returns (string memory) {
-        return "";
+        return _symbol;
     }
 
     /**
