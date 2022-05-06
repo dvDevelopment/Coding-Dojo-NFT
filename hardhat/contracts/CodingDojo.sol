@@ -14,6 +14,13 @@ contract CodingDojo is Ownable {
     // Token symbol
     string private _symbol;
 
+    uint256 private _counter = 0;
+    mapping(uint => string) private _tokenURIs;
+    mapping(uint => address) private _tokenOwners;
+    mapping(address => uint) private _ownerBalance;
+
+    uint256[] private _tokenIds;
+
     /**
      * @dev Initializes the contract by setting a `name` and a `symbol` to the token collection.
      */
@@ -54,7 +61,14 @@ contract CodingDojo is Ownable {
      * - `to` cannot be the zero address.
      *
     */
+
     function safeMint(address to, string memory uri) public onlyOwner {
+
+        uint256 token_id = _counter;
+        _counter++;
+        _tokenIds.push(token_id);
+
+
 
     }
 
@@ -81,13 +95,14 @@ contract CodingDojo is Ownable {
      * - `tokenId` must exist.
      */
     function _setTokenURI(uint256 tokenId, string memory _tokenURI) internal virtual {
+        _tokenURIs[tokenId] = _tokenURI;
     }
 
     /**
      * Returns the Uniform Resource Identifier (URI) for tokenId token.
      */
     function tokenURI(uint256 tokenId) public view returns (string memory) {
-        return "";
+        return _tokenURIs[tokenId];
     }
 
     /**
@@ -99,14 +114,14 @@ contract CodingDojo is Ownable {
      * and stop existing when they are burned (`_burn`).
      */
     function _exists(uint256 tokenId) internal view returns (bool) {
-        return true;
+        return _tokenOwners[tokenId] != address(0);
     }
 
     /**
      * @dev See {IERC721Enumerable-totalSupply}.
      */
     function totalSupply() public view returns (uint256) {
-        return 0;
+        return _counter;
     }
 
     /**
@@ -114,14 +129,14 @@ contract CodingDojo is Ownable {
      * Requirements: tokenId must exist.
     */
     function ownerOf(uint256 tokenId) external view returns (address) {
-        return address(0);
+        return _tokenOwners[tokenId];
     }
 
     /**
      * Returns the owner of the tokenId token.
     */
     function balanceOf(address owner) external view returns (uint256) {
-        return 0;
+        return _ownerBalance[owner];
     }
 
 }
